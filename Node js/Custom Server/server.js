@@ -1,35 +1,24 @@
 const http = require("http");
 const fs = require("fs");
-const path = require("path");
 
+const hostName = '127.0.0.1'
 const port = 3000;
-const server = http.createServer((req, res) => {
-  const filePath = path.join(
-    __dirname,
-    req.url === "/" ? "index.html" : req.url
-    
-  );
-  const extname = path.extname(filePath).toLowerCase();
+const myServer = http.createServer((req, res) => {
+if (req.url === '/') {
+    res.statusCode = 200;
+    res.setHeader('Content-Type' , 'text/plain')
+    res.end("Hello World")
+} else if (req.url === '/ice-tea'){
+  res.statusCode = 200;
+  res.setHeader('Content-Type' , 'text/plain')
+  res.end("Chai is ready ")
+} else{
+  res.statusCode = 404;
+  res.setHeader('Content-Type' , 'text/plain')
+  res.end("Url not found")
+}
+})
 
-  const fileTypes = {
-    ".html": "text/html",
-    ".css": "text/css",
-    ".js": "text/javascript",
-  };
-  const contentType = fileTypes[extname] || "application/octet-stream";
-  fs.readFile(filePath, (err, content) => {
-    if (err) {  
-        if (err.code === 'ENOENT') {
-            res.writeHead(404 , {"Content-Type" : "text/plain"}) 
-            res.end("404 : Url is not correct")
-        }  
-    } else {
-      res.writeHead(200 , {'Content-Type' : contentType})
-      res.end(content , 'utf-8');
-    }
-  });
-});
-
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+myServer.listen(port, hostName, () => {
+  console.log(`Server is listening at http://${hostName}:${port}`);
+})
