@@ -58,7 +58,6 @@ app.delete("/teas/:id", (req, res) => {
   teaData.splice(index, 1);
   console.log("deleted");
   return res.status(204).send();
-  
 });
 
 // Start the server
